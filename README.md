@@ -13,7 +13,7 @@ The repository includes:
 * Example of training on your own dataset
 
 ## Requirements
-Python 3.4, TensorFlow 1.3, Keras 2.0.8 and other common packages listed in `requirements.txt`.
+Python 3.4, Nvidia Cuda, cudNN, TensorFlow GPU 1.3, Keras 2.0.8 and other common packages listed in `requirements.txt`.
 
 ## This is fork of [Matterplot Mask R-CNN](https://github.com/matterport/Mask_RCNN)
 You can use it for detection an objects in the video or web-cam using OpenCV

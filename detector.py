@@ -22,6 +22,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-v', '--video', help='Video file for detection')
 parser.add_argument('-w', '--web', help='Web cam for detection')
 parser.add_argument('-i', '--image', help='Image file for detection')
+
+parser.add_argument('-r', '--resize', help='Size multiplier of image')
 parser.add_argument('-c', '--cpu', action='store_true',
                     help='Use CPU for detection')
 
@@ -41,6 +43,10 @@ elif params.web is not None:
 else:
     isVideo = True
     SOURCE = 0
+
+if params.resize is not None:
+    resizeMul = float(params.resize)
+    resizeUp = 1 / resizeMul
 
 if params.cpu:
     os.environ['CUDA_VISIBLE_DEVICES'] = ''
@@ -107,7 +113,8 @@ if (isVideo):
         if not success:
             break
 
-        #frame = cv.resize(frame, None, fx=0.3, fy=0.3)
+        if resizeMul is not None:
+            frame = cv.resize(frame, None, fx=resizeMul, fy=resizeMul)
         image_batch = [frame]
 
         results = model.detect(image_batch, verbose=0)
@@ -119,7 +126,8 @@ if (isVideo):
             im = image_batch[i]
             masked_image = visualize_video.get_masked_fixed_color(im, r['rois'], r['masks'], r['class_ids'],
                                                                   class_names, colors, r['scores'], show=False)
-            #masked_image = cv.resize(masked_image, None, fx=3, fy=3)
+            if resizeUp is not None:
+                masked_image = cv.resize(masked_image, None, fx=resizeUp, fy=resizeUp)
             masked_image_batch.append(masked_image)
 
         cv.imshow('Masked image', masked_image_batch[0])
